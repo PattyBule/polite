@@ -14,18 +14,18 @@
         /* 密码锁区域 */
         .lock-area { display: flex; gap: 10px; margin: 20px 0; width: 100%; }
         input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; width: 100%; }
-        button { padding: 12px 20px; background: #0366d6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        .btn-unlock { padding: 12px 20px; background: #0366d6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         
-        /* 错误提示文字（默认隐藏） */
+        /* 错误提示文字 */
         #error-msg { color: #ef4444; font-size: 14px; margin-bottom: 15px; display: none; font-weight: bold; }
 
-        /* 付款按钮 */
-        .btn-buy { display: block; width: 100%; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; text-decoration: none; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        /* 付款按钮 (改成 button 防止被拦截) */
+        .btn-buy { display: block; width: 100%; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; }
         .btn-buy:hover { background: #10b981; color: white; }
 
-        /* 解锁后的聊天按钮（默认隐藏） */
+        /* 解锁后的聊天按钮 (改成 button 防止被拦截) */
         #chat-area { display: none; width: 100%; max-width: 450px; text-align: center; margin-top: 20px; }
-        .btn-start { display: block; width: 100%; padding: 20px; background: #10b981; color: white; text-decoration: none; border-radius: 12px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: 0.3s; }
+        .btn-start { display: block; width: 100%; padding: 20px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: 0.3s; cursor: pointer; }
         .btn-start:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
     </style>
 </head>
@@ -38,26 +38,25 @@
         
         <div class="lock-area">
             <input type="text" id="password-input" placeholder="Enter VIP Code">
-            <button onclick="unlock()">Unlock</button>
+            <button class="btn-unlock" onclick="unlock()">Unlock</button>
         </div>
         
-        <!-- 页面内错误提示 -->
         <div id="error-msg">Invalid code! Please subscribe below.</div>
 
-        <!-- Creem 链接已填好 -->
-        <a href=" " target="_blank" class="btn-buy">
+        <!-- 绿色订阅按钮（绑定了 Creem 链接，直接页面跳转） -->
+        <button onclick="window.location.href='https://www.creem.io/payment/prod_7hJji50lduDw0e91WtBclR'" class="btn-buy">
             ⭐ Subscribe for $4.99/mo to get VIP
-        </a >
+        </button>
         <p style="font-size: 12px; color: #999; margin-top: 15px;">After payment, email weierjingyao@qq.com to get your code.</p >
     </div>
 
     <!-- 第二部分：密码正确后显示的“进入聊天”按钮 -->
     <div id="chat-area">
         <h2 style="color: #10b981; margin-bottom: 20px;">Access Granted! 🎉</h2>
-        <!-- 扣子链接已填好 -->
-        <a href="https://www.coze.cn/store/agent/7700979632833052707?bot_id=true" target="_blank" class="btn-start">
+        <!-- 进入聊天按钮（绑定了扣子链接，直接页面跳转） -->
+        <button onclick="window.location.href='https://www.coze.cn/store/agent/7700979632833052707?bot_id=true'" class="btn-start">
             🚀 Start Chatting Now
-        </a >
+        </button>
     </div>
 
     <script>
@@ -65,12 +64,11 @@
             const code = document.getElementById('password-input').value.trim();
             const errorMsg = document.getElementById('error-msg');
             
-            // 暗号
+            // 这里是你设置的白嫖拦截暗号，可以自己改
             if (code === 'POLITE888' || code === 'VIP2026') {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('chat-area').style.display = 'block';
             } else {
-                // 不弹窗了，直接在页面上显示红字
                 errorMsg.style.display = 'block';
             }
         }
