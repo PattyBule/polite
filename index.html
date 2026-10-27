@@ -5,56 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoliteText | AI Tone Polisher</title>
     <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: linear-gradient(135deg, #f7f9fc 0%, #e0f2fe 100%);
-            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center;
-        }
-        .card { 
-            background: white; padding: 40px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 450px; width: 90%;
-        }
-        h1 { color: #10b981; font-size: 42px; margin-bottom: 10px; margin-top: 0; }
-        p { color: #666; font-size: 18px; margin-bottom: 35px; line-height: 1.5; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 20px; }
+        h1 { color: #10b981; font-size: 36px; margin-top: 0; }
+        p { color: #666; font-size: 16px; line-height: 1.5; }
         
-        .btn-start { 
-            display: block; padding: 18px; background: #10b981; color: white; 
-            text-decoration: none; border-radius: 12px; font-size: 20px; font-weight: bold; 
-            transition: 0.3s; margin-bottom: 15px;
-        }
-        .btn-start:hover { background: #059669; transform: translateY(-2px); }
+        /* 密码锁区域 */
+        .lock-area { display: flex; gap: 10px; margin: 20px 0; }
+        input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        button { padding: 12px 20px; background: #0366d6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
         
-        .btn-buy {
-            display: block; padding: 15px; background: #f8fafc; color: #10b981;
-            border: 2px solid #10b981; text-decoration: none; border-radius: 12px; 
-            font-size: 16px; font-weight: bold; transition: 0.3s;
-        }
+        /* 付款按钮 */
+        .btn-buy { display: block; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; text-decoration: none; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; }
         .btn-buy:hover { background: #10b981; color: white; }
 
-        .footer { font-size: 12px; color: #999; margin-top: 25px; }
+        /* 解锁后的聊天按钮（默认隐藏） */
+        #chat-area { display: none; width: 100%; max-width: 500px; text-align: center; }
+        .btn-start { display: block; padding: 20px; background: #10b981; color: white; text-decoration: none; border-radius: 12px; font-size: 22px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: 0.3s; }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
     </style>
 </head>
 <body>
 
-    <div class="card">
+    <!-- 第一部分：输入密码的界面 -->
+    <div class="card" id="lock-screen">
         <h1>✨ PoliteText</h1>
-        <p>Type bluntly. Speak politely.<br>AI-powered English polisher for the Deaf and Hard of Hearing.</p >
+        <p>Type bluntly. Speak politely.<br>AI-powered English polisher.</p >
         
-        <!-- 扣子链接已经完美填入 -->
-        <a href=" " target="_blank" class="btn-start">
-            🚀 Start Chatting (Free Trial)
-        </a >
-
-        <!-- Creem 链接已经完美填入 -->
-        <a href="https://www.creem.io/payment/prod_7hJji50lduDw0e91WtBclR" target="_blank" class="btn-buy">
-            ⭐ Upgrade to Unlimited - $4.99/mo
-        </a >
-
-        <div class="footer">
-            No signup required for the first 3 uses.<br>
-            After subscribing, email us at weierjingyao@qq.com to get your VIP access.
+        <div class="lock-area">
+            <input type="text" id="password-input" placeholder="Enter VIP Code">
+            <button onclick="unlock()">Unlock</button>
         </div>
+
+        <!-- 你的 Creem 链接 -->
+        <a href=" " target="_blank" class="btn-buy">
+            ⭐ Subscribe for $4.99/mo to get the VIP code
+        </a >
+        <p style="font-size: 12px; color: #999; margin-top: 15px;">After payment, email weierjingyao@qq.com to get your code.</p >
     </div>
 
+    <!-- 第二部分：密码正确后显示的“进入聊天”按钮 -->
+    <div id="chat-area">
+        <h2 style="color: #10b981; margin-bottom: 20px;">Access Granted! 🎉</h2>
+        <!-- 扣子链接放在这里，点击直接新开标签页聊天 -->
+        <a href="https://www.coze.cn/store/agent/7700979632833052707?bot_id=true" target="_blank" class="btn-start">
+            🚀 Start Chatting Now
+        </a >
+    </div>
+
+    <script>
+        function unlock() {
+            const code = document.getElementById('password-input').value.trim();
+            // 暗号你可以自己改（区分大小写）
+            if (code === 'POLITE888' || code === 'VIP2026') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('chat-area').style.display = 'block';
+            } else {
+                alert("Invalid code! Please subscribe to get your code.");
+            }
+        }
+    </script>
 </body>
 </html>
