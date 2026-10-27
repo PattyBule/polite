@@ -2,76 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoliteText | AI Tone Polisher</title>
+    <!-- 引入扣子 SDK -->
+    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .card { background: white; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
-        h1 { color: #10b981; font-size: 36px; margin-top: 0; }
-        p { color: #666; font-size: 16px; line-height: 1.5; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
         
-        /* 密码锁区域 */
-        .lock-area { display: flex; gap: 10px; margin: 20px 0; width: 100%; }
-        input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; width: 100%; }
-        .btn-unlock { padding: 12px 20px; background: #0366d6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        /* 隐藏 SDK 默认的浮动小气泡，我们要用全屏 */
+        #coze-chat-container { flex: 1; width: 100%; position: relative; }
         
-        /* 错误提示文字 */
-        #error-msg { color: #ef4444; font-size: 14px; margin-bottom: 15px; display: none; font-weight: bold; }
-
-        /* 付款按钮 (改成 button 防止被拦截) */
-        .btn-buy { display: block; width: 100%; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; cursor: pointer; text-align: center; }
-        .btn-buy:hover { background: #10b981; color: white; }
-
-        /* 解锁后的聊天按钮 (改成 button 防止被拦截) */
-        #chat-area { display: none; width: 100%; max-width: 450px; text-align: center; margin-top: 20px; }
-        .btn-start { display: block; width: 100%; padding: 20px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: 0.3s; cursor: pointer; }
-        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); }
+        /* 强行让扣子的聊天框铺满全屏 */
+        div[style*="position: fixed"] {
+            width: 100% !important; height: 100vh !important;
+            top: 0 !important; left: 0 !important; bottom: 0 !important; right: 0 !important;
+            max-width: none !important; border-radius: 0 !important; z-index: 999999 !important;
+        }
     </style>
 </head>
 <body>
 
-    <!-- 第一部分：输入密码的界面 -->
-    <div class="card" id="lock-screen">
-        <h1>✨ PoliteText</h1>
-        <p>Type bluntly. Speak politely.<br>AI-powered English polisher.</p >
-        
-        <div class="lock-area">
-            <input type="text" id="password-input" placeholder="Enter VIP Code">
-            <button class="btn-unlock" onclick="unlock()">Unlock</button>
-        </div>
-        
-        <div id="error-msg">Invalid code! Please subscribe below.</div>
-
-        <!-- 绿色订阅按钮（绑定了 Creem 链接，直接页面跳转） -->
-        <button onclick="window.location.href='https://www.creem.io/payment/prod_7hJji50lduDw0e91WtBclR'" class="btn-buy">
-            ⭐ Subscribe for $4.99/mo to get VIP
-        </button>
-        <p style="font-size: 12px; color: #999; margin-top: 15px;">After payment, email weierjingyao@qq.com to get your code.</p >
-    </div>
-
-    <!-- 第二部分：密码正确后显示的“进入聊天”按钮 -->
-    <div id="chat-area">
-        <h2 style="color: #10b981; margin-bottom: 20px;">Access Granted! 🎉</h2>
-        <!-- 进入聊天按钮（绑定了扣子链接，直接页面跳转） -->
-        <button onclick="window.location.href='https://www.coze.cn/store/agent/7700979632833052707?bot_id=true'" class="btn-start">
-            🚀 Start Chatting Now
-        </button>
-    </div>
+    <!-- 聊天窗口容器 -->
+    <div id="coze-chat-container"></div>
 
     <script>
-        function unlock() {
-            const code = document.getElementById('password-input').value.trim();
-            const errorMsg = document.getElementById('error-msg');
-            
-            // 这里是你设置的白嫖拦截暗号，可以自己改
-            if (code === 'POLITE888' || code === 'VIP2026') {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('chat-area').style.display = 'block';
-            } else {
-                errorMsg.style.display = 'block';
+        new CozeWebSDK.WebChatClient({
+            config: {
+                bot_id: '7700979632833052707', // 你的扣子 Bot ID
+            },
+            componentProps: {
+                title: 'PoliteText',
+            },
+            auth: {
+                type: 'token',
+                // 👇👇👇 把下面这两处替换成你刚才复制的 pat_ 开头的长代码！👇👇👇
+                token: '<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7700979632833052707',
+    },
+    componentProps: {
+      title: 'Coze',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_********',
+      onRefreshToken: function () {
+        return 'pat_********'
+      }
+    }
+  });
+</script>', 
+                onRefreshToken: function () {
+                    return '<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7700979632833052707',
+    },
+    componentProps: {
+      title: 'Coze',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_********',
+      onRefreshToken: function () {
+        return 'pat_********'
+      }
+    }
+  });
+</script>'
+                }
             }
-        }
+        });
     </script>
 </body>
 </html>
