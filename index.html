@@ -2,80 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PoliteText | AI Tone Polisher</title>
-    <!-- 引入扣子 SDK -->
-    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
+        h1 { color: #10b981; font-size: 36px; margin-top: 0; }
+        p { color: #666; font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
         
-        /* 隐藏 SDK 默认的浮动小气泡，我们要用全屏 */
-        #coze-chat-container { flex: 1; width: 100%; position: relative; }
-        
-        /* 强行让扣子的聊天框铺满全屏 */
-        div[style*="position: fixed"] {
-            width: 100% !important; height: 100vh !important;
-            top: 0 !important; left: 0 !important; bottom: 0 !important; right: 0 !important;
-            max-width: none !important; border-radius: 0 !important; z-index: 999999 !important;
-        }
+        /* 体验按钮 */
+        .btn-start { display: block; width: 100%; padding: 18px; background: #0366d6; color: white; text-decoration: none; border-radius: 12px; font-size: 18px; font-weight: bold; transition: 0.3s; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(3, 102, 214, 0.3); }
+        .btn-start:hover { background: #0056b3; transform: translateY(-2px); }
+
+        /* 付款按钮 */
+        .btn-buy { display: block; width: 100%; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; text-decoration: none; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .btn-buy:hover { background: #10b981; color: white; }
+
+        .footer { font-size: 12px; color: #999; margin-top: 30px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <!-- 聊天窗口容器 -->
-    <div id="coze-chat-container"></div>
+    <div class="card">
+        <h1>✨ PoliteText</h1>
+        <p>Type bluntly. Speak politely.<br>AI-powered English polisher for the Deaf and Hard of Hearing.</p >
+        
+        <!-- 1. 体验按钮（去扣子聊天） -->
+        <a href=" " target="_blank" class="btn-start">
+            🚀 Try PoliteText Free
+        </a >
 
-    <script>
-        new CozeWebSDK.WebChatClient({
-            config: {
-                bot_id: '7700979632833052707', // 你的扣子 Bot ID
-            },
-            componentProps: {
-                title: 'PoliteText',
-            },
-            auth: {
-                type: 'token',
-                // 👇👇👇 把下面这两处替换成你刚才复制的 pat_ 开头的长代码！👇👇👇
-                token: '<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
-<script>
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7700979632833052707',
-    },
-    componentProps: {
-      title: 'Coze',
-    },
-    auth: {
-      type: 'token',
-      token: 'pat_********',
-      onRefreshToken: function () {
-        return 'pat_********'
-      }
-    }
-  });
-</script>', 
-                onRefreshToken: function () {
-                    return '<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
-<script>
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7700979632833052707',
-    },
-    componentProps: {
-      title: 'Coze',
-    },
-    auth: {
-      type: 'token',
-      token: 'pat_********',
-      onRefreshToken: function () {
-        return 'pat_********'
-      }
-    }
-  });
-</script>'
-                }
-            }
-        });
-    </script>
+        <!-- 2. 付款按钮（Creem） -->
+        <a href="https://www.creem.io/payment/prod_7hJji50lduDw0e91WtBclR" target="_blank" class="btn-buy">
+            ⭐ Upgrade to VIP - $4.99/mo
+        </a >
+
+        <div class="footer">
+            No signup required for the free trial.<br>
+            After subscribing, email weierjingyao@qq.com to get your VIP unlimited access link.
+        </div>
+    </div>
+
 </body>
 </html>
