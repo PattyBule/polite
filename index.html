@@ -2,21 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoliteText Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PoliteText | AI Tone Polisher</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #f7f9fc 0%, #e0f2fe 100%); overflow-y: auto; }
+        
+        /* 锁屏页面 */
+        .lock-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: white; padding: 40px 25px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #10b981; font-size: 38px; margin-bottom: 10px; }
+        p { color: #666; font-size: 15px; margin-bottom: 30px; line-height: 1.5; }
+        
+        /* 输入框区域 */
+        .input-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        input { width: 100%; padding: 15px; border: 2px solid #e1e4e8; border-radius: 12px; font-size: 16px; outline: none; text-align: center; transition: 0.3s; }
+        input:focus { border-color: #0366d6; }
+        .btn-unlock { padding: 15px; background: #0366d6; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-unlock:hover { background: #0056b3; }
+        
+        /* 错误提示 */
+        #error-msg { color: #ef4444; font-size: 14px; margin-top: -10px; margin-bottom: 15px; display: none; font-weight: bold; }
+
+        /* 购买按钮 */
+        .btn-buy { display: block; width: 100%; padding: 15px; background: #f8fafc; color: #10b981; border: 2px solid #10b981; text-decoration: none; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .btn-buy:hover { background: #10b981; color: white; }
+        .footer-text { font-size: 12px; color: #999; margin-top: 20px; line-height: 1.4; }
+
+        /* 聊天区域（默认隐藏） */
+        #chat-area { display: none; width: 100%; height: 100vh; background: white; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
 </head>
-<body style="padding: 40px; font-family: sans-serif; text-align: center;">
+<body>
 
-    <h1 style="color: #10b981;">PoliteText Test</h1>
+    <!-- 第一层：密码锁 -->
+    <div class="lock-screen" id="lock-screen">
+        <div class="card">
+            <h1>✨ PoliteText</h1>
+            <p>Type bluntly. Speak politely.<br>AI-powered English polisher.</p >
+            
+            <div class="input-group">
+                <input type="text" id="password-input" placeholder="Enter VIP Code">
+                <button class="btn-unlock" onclick="unlock()">Unlock Pro</button>
+            </div>
+            
+            <div id="error-msg">Invalid code! Please check your email or subscribe below.</div>
 
-    <!-- 强制原地跳转，不用新窗口，防止被拦截 -->
-    <a href=" " style="display: block; padding: 20px; background: blue; color: white; font-size: 24px; text-decoration: none; margin-bottom: 20px;">
-        点击这里强制去扣子聊天
-    </a >
+            <!-- 你的 Creem 付款链接 -->
+            <a href=" " target="_blank" class="btn-buy">
+                ⭐ Subscribe for $4.99/mo to get VIP
+            </a >
+            
+            <div class="footer-text">
+                After payment, email weierjingyao@qq.com to get your VIP code.
+            </div>
+        </div>
+    </div>
 
-    <a href="https://www.creem.io/payment/prod_7hJji50lduDw0e91WtBclR" style="display: block; padding: 20px; background: green; color: white; font-size: 24px; text-decoration: none;">
-        点击这里强制去 Creem 付款
-    </a >
+    <!-- 第二层：真正的 AI 聊天界面（被密码锁保护） -->
+    <div id="chat-area">
+        <!-- 你的 FastGPT 免登录聊天链接 -->
+        <iframe src="https://cloud.fastgpt.cn/chat/share?shareId=lpkpS8DladZazcL0cLzfWmoO" allow="microphone; camera"></iframe>
+    </div>
 
+    <script>
+        function unlock() {
+            const code = document.getElementById('password-input').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+            
+            // 👑 这里是你设置的 VIP 暗号，可以设置多个
+            const validCodes = ['POLITE888', 'VIP2026', 'PRO'];
+            
+            if (validCodes.includes(code.toUpperCase())) {
+                // 密码正确，隐藏锁屏，显示聊天框
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('chat-area').style.display = 'block';
+                
+                // 记住他，下次不用再输密码
+                localStorage.setItem('isPoliteVIP', 'true');
+            } else {
+                // 密码错误，显示红色提示
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // 如果之前解锁过，自动进入
+        window.onload = function() {
+            if (localStorage.getItem('isPoliteVIP') === 'true') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('chat-area').style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
